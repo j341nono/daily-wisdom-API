@@ -9,3 +9,36 @@ This project is designed as an **open-source tool** that anyone can clone, run, 
     - BeautifulSoup4 : HTML パース
 - データベース関連
     - SQLite3
+
+## API設計
+
+### ランダム取得
+- GET /quotes/random
+- レスポンス例
+```json
+{
+    "philosopher": "Socrates", 
+    "quote": "The unexamined life is not worth living."
+}
+```
+- クエリパラメータ不要（特定の哲学者から取得したい場合は ?philosopher=... を利用）
+
+### 名言の追加
+- POST /quotes
+- リクエストボディ(JSON):
+```json
+{
+  "philosopher": "Plato",
+  "quote": "Wise men speak because they have something to say."
+}
+```
+
+### 名言の削除
+- DELETE /quotes
+- クエリパラメータ:
+```json
+{
+    "philosopher": "Plato",
+    "quote": "Wise men speak because they have something to say." 
+}
+```
