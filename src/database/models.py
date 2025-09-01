@@ -1,4 +1,7 @@
 import sqlite3
+import json
+from typing import List, Tuple
+
 
 SAVE_PATH: str = "data/data.json"
 
@@ -28,12 +31,39 @@ def insert_qoute(philosopher: str, quotes: str):
     conn.close()
 
 
+def insert_many(quotes: List[Tuple[str, str]]):
+    conn = sqlite3.connect(DB_NAME)
+    cur = conn.cursor()
+    cur.executemany(INSERT_TABLE_TEXT, quotes)
+    conn.commit()
+    conn.close()
+
+
+def prepare_json_for_db(save_path: str) -> List[Tuple[str, str]]:
+    with open(save_path, "r", encoding="utf-8") as f:
+        data_list: List[dict[Tuple[str, list]]] = json.load(f)
+    
+    input_list: List[Tuple[str, str]] = []
+    for data_line in data_list:
+        philosopher = data_line.get("philosopher")
+        quotes_list = data_line.get("quotes")
+        for quote in quotes_list:
+            input_list.append((philosopher, quote))
+    return input_list 
+
+
 def debug_insert_table():
     philosopher = "john"
     quotes = "you can do it."
     insert_qoute(philosopher=philosopher, quotes=quotes)
 
 
+def debug_insert_many():
+    input_list: List[Tuple[str, str]] = prepare_json_for_db(save_path=SAVE_PATH)
+    
+
+
 if __name__ == "__main__":
-    create_table()
-    debug_insert_table()
+    # create_table()
+    # debug_insert_table()
+    debug_insert_many()
