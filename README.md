@@ -5,5 +5,7 @@ This project is designed as an **open-source tool** that anyone can clone, run, 
 
 ## 技術スタック
 - スクレイピング関連
-  - requests : HTML データ取得
-  - BeautifulSoup4 : HTML パース
+    - requests : HTML データ取得
+    - BeautifulSoup4 : HTML パース
+- データベース関連
+    - SQLite3
