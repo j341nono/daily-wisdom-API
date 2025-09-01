@@ -44,10 +44,10 @@ def scrape() -> list[dict]:
 
     results_processed = []
     for result_line in results:
-        result_line_raw = result_line.get("philosopher")
+        result_line_philosopher_raw = result_line.get("philosopher")
         result_line_quotes_line = result_line.get("quotes")
-        result_line_processed = result_line_raw[:-5] # "の名言紹介" を削除
-        results_processed.append({"philosopher": result_line_quotes_line, "quotes": result_line_processed})
+        result_line_philosopher_processed = result_line_philosopher_raw[:-5] # "の名言紹介" を削除
+        results_processed.append({"philosopher": result_line_philosopher_processed, "quotes": result_line_quotes_line})
 
     return results_processed
 
@@ -60,7 +60,7 @@ def save_json(save_data: list, save_path: str) -> None:
 def main():
     results = scrape()
     save_json(save_data=results, save_path=SAVE_PATH)
-    
+
 
 def debug_parser_1():
     r = requests.get(SOURCE_URL)
