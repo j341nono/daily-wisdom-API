@@ -19,6 +19,7 @@ CREATE_TABLE_TEXT: str = f"""CREATE TABLE IF NOT EXISTS {TABLE_NAME} (" \
 INSERT_TABLE_TEXT: str = f"INSERT INTO {TABLE_NAME} (philosopher, quotes) VALUES (?, ?)"
 DELETE_TABLE_TEXT: str = f"DELETE FROM {TABLE_NAME} where philosopher = ? AND quotes = ?"
 COUNT_TEXT: str = f"SELECT COUNT(*) FROM {TABLE_NAME}"
+SELECT_ONE_TEXT: str = f"SELECT * FROM {TABLE_NAME} where id = ?"
 
 
 def parse_args():
@@ -27,6 +28,7 @@ def parse_args():
     parser.add_argument("--philosopher", type=str, help="Philosopher's name")
     parser.add_argument("--quotes", type=str, help="Quote text")
     parser.add_argument("--delete", action="store_true")
+    parser.add_argument("--random_select", action="store_true")
     return parser.parse_args()
 
 
@@ -82,13 +84,13 @@ def initial_commit() -> None:
     insert_many(quotes=input_list)
 
 
-def get_random_qoute() -> List[Tuple[str, str]]:
+def get_random_qoute() -> Tuple[str, str]:
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()
     cur.execute(COUNT_TEXT)
     count = cur.fetchone()[0]
     get_id = random.randint(1, count)
-    cur.execute(f"SELECT * FROM {TABLE_NAME} where id = ?", (get_id,))
+    cur.execute(SELECT_ONE_TEXT, (get_id,))
     _, philosopher, quote = cur.fetchone()
     conn.close()
     return philosopher, quote
@@ -103,6 +105,9 @@ def main():
 
     if args.initial_commit:
         initial_commit()
+    elif args.random_select:
+        philosopher, quote = get_random_qoute()
+        
     elif args.delete:
         delete_qoute(philosopher=args.philosopher, quotes=args.quotes)
     elif args.philosopher and args.quotes:
@@ -123,5 +128,5 @@ def debug_insert_many():
 if __name__ == "__main__":
     # create_table()
     # debug_insert_table()
-    get_random_qoute()
-    # main()
+    # get_random_qoute()
+    main()
