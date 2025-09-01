@@ -19,6 +19,8 @@ INSERT_TABLE_TEXT = "INSERT INTO quotes_table (philosopher, quotes) VALUES (?, ?
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--initial_commit", action="store_true")
+    parser.add_argument("--philosopher", type=str, help="Philosopher's name")
+    parser.add_argument("--quotes", type=str, help="Quote text")
     return parser.parse_args()
 
 
@@ -64,6 +66,7 @@ def initial_commit() -> None:
     insert_many(quotes=input_list)
 
 
+
 def debug_insert_table():
     philosopher = "john"
     quotes = "you can do it."
@@ -77,9 +80,15 @@ def debug_insert_many():
 
 def main():
     args = parse_args()
+    if (args.philosopher and not args.quotes) or (args.quotes and not args.philosopher):
+        print("--philosopher と --quotes はセットで指定してください。")
+
     create_table()
     if args.initial_commit:
         initial_commit()
+    
+    if args.philosopher and args.quotes:
+        insert_qoute(philosopher=args.philosopher, quotes=args.quotes)
     
         
 
