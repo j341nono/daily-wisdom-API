@@ -35,11 +35,13 @@ def debug_parser():
     for title_raw in titles_raw:
         titles_processed.append(title_raw.text)
     print(titles_processed)
+    print(f"len: {len(titles_processed)}")
 
     quotes_processed = []
     for quote_raw in quotes_raw:
         quotes_processed.append(quote_raw.text)
     print(quotes_processed)
+    print(f"len: {len(quotes_processed)}")
 
 if __name__ == "__main__":
     debug_parser()
