@@ -28,8 +28,8 @@ This project is designed as an **open-source tool** that anyone can clone, run, 
 - リクエストボディ(JSON):
 ```json
 {
-  "philosopher": "Plato",
-  "quote": "Wise men speak because they have something to say."
+    "philosopher": "Plato",
+    "quote": "Wise men speak because they have something to say."
 }
 ```
 
