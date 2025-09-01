@@ -9,6 +9,8 @@ This project is designed as an **open-source tool** that anyone can clone, run, 
     - BeautifulSoup4 : HTML パース
 - データベース関連
     - SQLite3
+- API
+    - FastAPI
 
 ## API設計
 
