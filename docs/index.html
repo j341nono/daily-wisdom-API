@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> daily-wisdom-API Documentation</title>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui.css" />
+    <link rel="icon" type="image/png" href="https://unpkg.com/swagger-ui-dist@5.17.14/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="https://unpkg.com/swagger-ui-dist@5.17.14/favicon-16x16.png" sizes="16x16" />
+    <style>
+        html {
+            box-sizing: border-box;
+            overflow: -moz-scrollbars-vertical;
+            overflow-y: scroll;
+        }
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+        body {
+            margin: 0;
+            background: #fafafa;
+        }
+        .header {
+            background: #1e1e1e;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.8;
+        }
+        #swagger-ui {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 daily-wisdom-API</h1>
+        <p>哲学者の名言をランダムで取得できるAPI / An API that can randomly retrieve philosopher's quotes.</p>
+    </div>
+    
+    <div id="swagger-ui"></div>
+    
+    <script src="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui-bundle.js" charset="UTF-8"></script>
+    <script src="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui-standalone-preset.js" charset="UTF-8"></script>
+    <script>
+        window.onload = function() {
+            const ui = SwaggerUIBundle({
+                url: "./openapi.json",
+                dom_id: '#swagger-ui',
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ],
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                layout: "StandaloneLayout",
+                defaultModelsExpandDepth: 1,
+                defaultModelExpandDepth: 1,
+                docExpansion: "list",
+                filter: true,
+                showRequestHeaders: true,
+                showResponseHeaders: true,
+                tryItOutEnabled: false,
+                persistAuthorization: false
+            });
+            
+            setTimeout(() => {
+                const infoSection = document.querySelector('.info');
+                if (infoSection) {
+                    const notice = document.createElement('div');
+                    notice.innerHTML = `
+                        <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 4px; padding: 12px; margin: 20px 0; color: #856404;">
+                            <strong>🚀 ローカル実行方法:</strong><br>
+                            このAPIを実際に使用するには、<a href="https://github.com/j341nono/daily-wisdom-API" target="_blank" rel="noopener">GitHubリポジトリ</a>をクローンし、<br>
+                            <code>./scripts/run_database.sh</code> でデータを準備後、<code>./scripts/run_api.sh</code> でAPIサーバーを起動してください。<br>
+                            サーバーは <code>http://127.0.0.1:8000</code> で利用できます。
+                        </div>
+                    `;
+                    infoSection.appendChild(notice);
+                }
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
