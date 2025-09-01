@@ -57,6 +57,11 @@ def save_json(save_data: list, save_path: str) -> None:
         json.dump(save_data, f, indent=2, ensure_ascii=False)
 
 
+def main():
+    results = scrape()
+    save_json(save_data=results, save_path=SAVE_PATH)
+    
+
 def debug_parser_1():
     r = requests.get(SOURCE_URL)
     r.raise_for_status()
@@ -99,11 +104,6 @@ def debug_parser_3():
         unique_quotes = list(OrderedDict.fromkeys(quotes))
         print(unique_quotes)
         # import sys; sys.exit()
-
-
-def main():
-    results = scrape()
-    save_json(save_data=results, save_path=SAVE_PATH)
 
 
 if __name__ == "__main__":
