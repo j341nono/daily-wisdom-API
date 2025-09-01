@@ -14,13 +14,14 @@ CREATE_TABLE_TEXT = "CREATE TABLE IF NOT EXISTS quotes_table (" \
 "quotes STRING)"
 
 INSERT_TABLE_TEXT = "INSERT INTO quotes_table (philosopher, quotes) VALUES (?, ?)"
-
+DELETE_TABLE_TEXT = "DELETE FROM quotes_table where philosopher = ? AND quotes = ?"
 
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--initial_commit", action="store_true")
     parser.add_argument("--philosopher", type=str, help="Philosopher's name")
     parser.add_argument("--quotes", type=str, help="Quote text")
+    parser.add_argument("--delete", action="store_true")
     return parser.parse_args()
 
 
@@ -46,6 +47,16 @@ def insert_many(quotes: List[Tuple[str, str]]) -> None:
     cur.executemany(INSERT_TABLE_TEXT, quotes)
     conn.commit()
     conn.close()
+
+
+def delete_qoute(philosopher: str, quotes: str) -> int:
+    conn = sqlite3.connect(DB_NAME)
+    cur = conn.cursor()
+    cur.execute(DELETE_TABLE_TEXT, (philosopher, quotes))
+    conn.commit()
+    delete_rows = cur.rowcount
+    conn.close()
+    return delete_rows
 
 
 def prepare_json_for_db(save_path: str) -> List[Tuple[str, str]]:
@@ -84,14 +95,15 @@ def main():
         print("--philosopher と --quotes はセットで指定してください。")
 
     create_table()
+
     if args.initial_commit:
         initial_commit()
-    
-    if args.philosopher and args.quotes:
+    elif args.delete:
+        delete_qoute(philosopher=args.philosopher, quotes=args.quotes)
+    elif args.philosopher and args.quotes:
         insert_qoute(philosopher=args.philosopher, quotes=args.quotes)
     
-        
-
+    
 
 if __name__ == "__main__":
     # create_table()
