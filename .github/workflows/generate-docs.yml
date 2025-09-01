@@ -1,0 +1,89 @@
+name: Generate and Deploy API Documentation
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  generate-docs:
+    name: Generate API Documentation
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.9'
+        
+    - name: 📦 Install uv
+      uses: astral-sh/setup-uv@v2
+      
+    - name: 📦 Install dependencies
+      run: |
+        uv venv
+        source .venv/bin/activate
+        uv sync
+      
+    - name: 🔍 Verify FastAPI app
+      run: |
+        source .venv/bin/activate
+        python -c "
+        import sys
+        sys.path.append('src')
+        try:
+            from src.api.api import app
+            print('✅ FastAPIアプリのインポートに成功しました')
+            print(f'アプリタイトル: {app.title if hasattr(app, \"title\") else \"未設定\"}')
+        except ImportError as e:
+            print(f'❌ FastAPIアプリのインポートに失敗: {e}')
+            sys.exit(1)
+        "
+      
+    - name: 📖 Generate OpenAPI specification
+      run: |
+        source .venv/bin/activate
+        python generate_openapi.py
+        
+    - name: 🔍 Verify generated files
+      run: |
+        echo "=== 生成されたファイルの確認 ==="
+        ls -la docs/
+        echo "=== OpenAPI JSONの内容確認（最初の10行）==="
+        head -10 docs/openapi.json || echo "OpenAPI JSONファイルが見つかりません"
+        
+    - name: 📄 Setup Pages
+      uses: actions/configure-pages@v4
+      
+    - name: 📤 Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: './docs'
+
+  deploy:
+    name: Deploy to GitHub Pages
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: generate-docs
+    
+    steps:
+    - name: 🚀 Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
