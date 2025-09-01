@@ -2,10 +2,19 @@ import sqlite3
 
 SAVE_PATH: str = "data/data.json"
 
-DB_NAME = "data.db"
+DB_NAME = "src/database/data.db"
+
+CREATE_TABLE_TEXT = "CREATE TABLE quotes (id INTEGER PRIMARY KEY AUTOINCREMENT," \
+"philosopher STRING," \
+"quotes STRING)"
+
 
 def main():
     conn = sqlite3.connect(DB_NAME)
+    cur = conn.cursor()
+    cur.execute(CREATE_TABLE_TEXT)
+
+    conn.commit()
     conn.close()
 
 if __name__ == "__main__":
