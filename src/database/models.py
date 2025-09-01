@@ -10,13 +10,13 @@ DB_NAME: str = "src/database/data.db"
 
 TABLE_NAME: str = "quotes_table"
 
-CREATE_TABLE_TEXT: str = "CREATE TABLE IF NOT EXISTS {TABLE_NAME} (" \
+CREATE_TABLE_TEXT: str = f"""CREATE TABLE IF NOT EXISTS {TABLE_NAME} (" \
 "id INTEGER PRIMARY KEY AUTOINCREMENT," \
 "philosopher STRING," \
-"quotes STRING)"
+"quotes STRING)"""
 
-INSERT_TABLE_TEXT: str = "INSERT INTO {TABLE_NAME} (philosopher, quotes) VALUES (?, ?)"
-DELETE_TABLE_TEXT: str = "DELETE FROM {TABLE_NAME} where philosopher = ? AND quotes = ?"
+INSERT_TABLE_TEXT: str = f"INSERT INTO {TABLE_NAME} (philosopher, quotes) VALUES (?, ?)"
+DELETE_TABLE_TEXT: str = f"DELETE FROM {TABLE_NAME} where philosopher = ? AND quotes = ?"
 
 
 def parse_args():
