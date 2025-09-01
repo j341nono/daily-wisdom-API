@@ -32,13 +32,15 @@ async def _get_random():
 async def _post_quote(item: Item):
     try:
         insert_qoute(philosopher=item.philosopher, quite=item.quote)
-        success = True
-    except:
-        success = False
-    if success:
-        return {"success": success, "message": "Quote added successfully."}
-    else:
-        return {"success": success, "message": "Both 'philosopher' and 'quote' are required."}
+        return {
+            "success": True, 
+            "message": "Quote added successfully."
+        }
+    except Exception as e:
+        return {
+            "success": False, 
+            "message": f"error occurred: {str(e)}",
+        }
 
 
 @app.delete("/quotes")
@@ -61,6 +63,6 @@ async def _delete_quote(item: Item):
     except Exception as e:
         return {
             "success": False, 
-            "message": f"error_occurred: {str(e)}", 
+            "message": f"error occurred: {str(e)}", 
         }
 
