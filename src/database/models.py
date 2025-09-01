@@ -6,15 +6,18 @@ import argparse
 
 SAVE_PATH: str = "data/data.json"
 
-DB_NAME = "src/database/data.db"
+DB_NAME: str = "src/database/data.db"
 
-CREATE_TABLE_TEXT = "CREATE TABLE IF NOT EXISTS quotes_table (" \
+TABLE_NAME: str = "quotes_table"
+
+CREATE_TABLE_TEXT: str = "CREATE TABLE IF NOT EXISTS {TABLE_NAME} (" \
 "id INTEGER PRIMARY KEY AUTOINCREMENT," \
 "philosopher STRING," \
 "quotes STRING)"
 
-INSERT_TABLE_TEXT = "INSERT INTO quotes_table (philosopher, quotes) VALUES (?, ?)"
-DELETE_TABLE_TEXT = "DELETE FROM quotes_table where philosopher = ? AND quotes = ?"
+INSERT_TABLE_TEXT: str = "INSERT INTO {TABLE_NAME} (philosopher, quotes) VALUES (?, ?)"
+DELETE_TABLE_TEXT: str = "DELETE FROM {TABLE_NAME} where philosopher = ? AND quotes = ?"
+
 
 def parse_args():
     parser = argparse.ArgumentParser()
