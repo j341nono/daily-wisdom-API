@@ -15,7 +15,7 @@ CREATE_TABLE_TEXT = "CREATE TABLE IF NOT EXISTS quotes_table (" \
 INSERT_TABLE_TEXT = "INSERT INTO quotes_table (philosopher, quotes) VALUES (?, ?)"
 
 
-def create_table():
+def create_table() -> None:
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()
     cur.execute(CREATE_TABLE_TEXT)
@@ -23,7 +23,7 @@ def create_table():
     conn.close()
 
 
-def insert_qoute(philosopher: str, quotes: str):
+def insert_qoute(philosopher: str, quotes: str) -> None:
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()
     cur.execute(INSERT_TABLE_TEXT, (philosopher, quotes))
@@ -31,7 +31,7 @@ def insert_qoute(philosopher: str, quotes: str):
     conn.close()
 
 
-def insert_many(quotes: List[Tuple[str, str]]):
+def insert_many(quotes: List[Tuple[str, str]]) -> None:
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()
     cur.executemany(INSERT_TABLE_TEXT, quotes)
@@ -60,7 +60,7 @@ def debug_insert_table():
 
 def debug_insert_many():
     input_list: List[Tuple[str, str]] = prepare_json_for_db(save_path=SAVE_PATH)
-    
+    insert_many(quotes=input_list)
 
 
 if __name__ == "__main__":
