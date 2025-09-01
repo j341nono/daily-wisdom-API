@@ -1,9 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
 from collections import OrderedDict
+import json
 
 
 SOURCE_URL: str = 'https://tomo8language.com/quotes-list-philosopher/'
+SAVE_PATH: str = "data/data.json"
 
 HEADING_CLASS: str = "wp-block-heading"
 HEADING_TAG: str = "h2"
@@ -36,10 +38,23 @@ def scrape() -> list[dict]:
                     quotes.append(text)
 
         unique_quotes = list(OrderedDict.fromkeys(quotes))
-
         results.append({"philosopher": philosopher, "quotes": unique_quotes})
+    
+    results.pop(0) # 最初の要素は不要
 
-    return results
+    results_processed = []
+    for result_line in results:
+        result_line_raw = result_line.get("philosopher")
+        result_line_quotes_line = result_line.get("quotes")
+        result_line_processed = result_line_raw[:-5] # "の名言紹介" を削除
+        results_processed.append({"philosopher": result_line_quotes_line, "quotes": result_line_processed})
+
+    return results_processed
+
+
+def save_json(save_data: list, save_path: str) -> None:
+    with open(save_path, "w", encoding="utf-8") as f:
+        json.dump(save_data, f, indent=2, ensure_ascii=False)
 
 
 def debug_parser_1():
@@ -86,6 +101,12 @@ def debug_parser_3():
         # import sys; sys.exit()
 
 
+def main():
+    results = scrape()
+    save_json(save_data=results, save_path=SAVE_PATH)
+
+
 if __name__ == "__main__":
     # main()
-    debug_parser_3()
+    # debug_parser_3()
+    main()
