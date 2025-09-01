@@ -31,7 +31,7 @@ async def _get_random():
 @app.post("/quotes")
 async def _post_quote(item: Item):
     try:
-        insert_qoute(philosopher=item.philosopher, quite=item.quote)
+        insert_qoute(philosopher=item.philosopher, quotes=item.quote)
         return {
             "success": True, 
             "message": "Quote added successfully."
