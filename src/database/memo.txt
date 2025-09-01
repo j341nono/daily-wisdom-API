@@ -1,0 +1,16 @@
+# データベースを起動
+sqlite3 src/database/data.db
+
+# テーブル一覧を確認
+.tables
+
+# テーブルの構造を確認
+.schema quotes_table
+
+# データを確認
+SELECT * FROM quotes_table;
+
+# 終了
+.exit
+
+

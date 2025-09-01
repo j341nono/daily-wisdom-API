@@ -1,0 +1,12 @@
+[project]
+name = "daily-wisdom-api"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "bs4>=0.0.2",
+    "fastapi[all]>=0.116.1",
+    "lxml>=6.0.1",
+    "requests>=2.32.5",
+]
