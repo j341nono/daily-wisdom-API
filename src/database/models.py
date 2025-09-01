@@ -1,6 +1,7 @@
 import sqlite3
 import json
 from typing import List, Tuple
+import argparse
 
 
 SAVE_PATH: str = "data/data.json"
@@ -13,6 +14,12 @@ CREATE_TABLE_TEXT = "CREATE TABLE IF NOT EXISTS quotes_table (" \
 "quotes STRING)"
 
 INSERT_TABLE_TEXT = "INSERT INTO quotes_table (philosopher, quotes) VALUES (?, ?)"
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--initial_commit", action="store_true")
+    return parser.parse_args()
 
 
 def create_table() -> None:
@@ -52,6 +59,11 @@ def prepare_json_for_db(save_path: str) -> List[Tuple[str, str]]:
     return input_list 
 
 
+def initial_commit() -> None:
+    input_list: List[Tuple[str, str]] = prepare_json_for_db(save_path=SAVE_PATH)
+    insert_many(quotes=input_list)
+
+
 def debug_insert_table():
     philosopher = "john"
     quotes = "you can do it."
@@ -63,7 +75,16 @@ def debug_insert_many():
     insert_many(quotes=input_list)
 
 
+def main():
+    args = parse_args()
+    create_table()
+    if args.initial_commit:
+        initial_commit()
+    
+        
+
+
 if __name__ == "__main__":
     # create_table()
     # debug_insert_table()
-    debug_insert_many()
+    main()

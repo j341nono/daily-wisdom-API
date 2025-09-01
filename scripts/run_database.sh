@@ -1,3 +1,3 @@
 #!/bin/bash
 
-uv run src/database/models.py
+uv run src/database/models.py --initial_commit
