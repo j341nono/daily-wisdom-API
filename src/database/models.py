@@ -80,18 +80,6 @@ def initial_commit() -> None:
     insert_many(quotes=input_list)
 
 
-
-def debug_insert_table():
-    philosopher = "john"
-    quotes = "you can do it."
-    insert_qoute(philosopher=philosopher, quotes=quotes)
-
-
-def debug_insert_many():
-    input_list: List[Tuple[str, str]] = prepare_json_for_db(save_path=SAVE_PATH)
-    insert_many(quotes=input_list)
-
-
 def main():
     args = parse_args()
     if (args.philosopher and not args.quotes) or (args.quotes and not args.philosopher):
@@ -105,7 +93,17 @@ def main():
         delete_qoute(philosopher=args.philosopher, quotes=args.quotes)
     elif args.philosopher and args.quotes:
         insert_qoute(philosopher=args.philosopher, quotes=args.quotes)
-    
+
+
+def debug_insert_table():
+    philosopher = "john"
+    quotes = "you can do it."
+    insert_qoute(philosopher=philosopher, quotes=quotes)
+
+
+def debug_insert_many():
+    input_list: List[Tuple[str, str]] = prepare_json_for_db(save_path=SAVE_PATH)
+    insert_many(quotes=input_list)
     
 
 if __name__ == "__main__":
