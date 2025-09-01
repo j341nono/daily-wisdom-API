@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from src.database.models import (
     get_random_qoute,
     insert_qoute,
+    delete_qoute,
 )
 
 
@@ -30,7 +31,7 @@ async def _get_random():
 @app.post("/quotes")
 async def _post_quote(item: Item):
     try:
-        insert_qoute(item.philosopher, item.quote)
+        insert_qoute(philosopher=item.philosopher, quite=item.quote)
         success = True
     except:
         success = False
@@ -39,4 +40,27 @@ async def _post_quote(item: Item):
     else:
         return {"success": success, "message": "Both 'philosopher' and 'quote' are required."}
 
-    
+
+@app.delete("/quotes")
+async def _delete_quote(item: Item):
+    try: 
+        deleted_rows = delete_qoute(philosopher=item.philosopher, quotes=item.quote)
+        if deleted_rows > 0:
+            return {
+                "success": True, 
+                "message": "Quote deleted successfully.", 
+                "delete_rows": deleted_rows
+            }
+        else:
+            return {
+                "success": False,
+                "message": "Philosopher or Quote not found.",
+                "philosopher": item.philosopher,
+                "quote": item.quote
+            }
+    except Exception as e:
+        return {
+            "success": False, 
+            "message": f"error_occurred: {str(e)}", 
+        }
+

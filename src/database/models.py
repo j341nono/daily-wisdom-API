@@ -59,11 +59,15 @@ def insert_many(quotes: List[Tuple[str, str]]) -> None:
 def delete_qoute(philosopher: str, quotes: str) -> int:
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()
-    cur.execute(DELETE_TABLE_TEXT, (philosopher, quotes))
-    conn.commit()
-    delete_rows = cur.rowcount
-    conn.close()
-    return delete_rows
+    try:
+        cur.execute(DELETE_TABLE_TEXT, (philosopher, quotes))
+        conn.commit()
+        delete_rows = cur.rowcount
+        conn.close()
+        return delete_rows
+    except:
+        conn.close()
+        return -1
 
 
 def prepare_json_for_db(save_path: str) -> List[Tuple[str, str]]:
