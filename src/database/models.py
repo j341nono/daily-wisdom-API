@@ -2,6 +2,7 @@ import sqlite3
 import json
 from typing import List, Tuple
 import argparse
+import random
 
 
 SAVE_PATH: str = "data/data.json"
@@ -17,6 +18,7 @@ CREATE_TABLE_TEXT: str = f"""CREATE TABLE IF NOT EXISTS {TABLE_NAME} (" \
 
 INSERT_TABLE_TEXT: str = f"INSERT INTO {TABLE_NAME} (philosopher, quotes) VALUES (?, ?)"
 DELETE_TABLE_TEXT: str = f"DELETE FROM {TABLE_NAME} where philosopher = ? AND quotes = ?"
+COUNT_TEXT: str = f"SELECT COUNT(*) FROM {TABLE_NAME}"
 
 
 def parse_args():
@@ -80,6 +82,18 @@ def initial_commit() -> None:
     insert_many(quotes=input_list)
 
 
+def get_random_qoute() -> List[Tuple[str, str]]:
+    conn = sqlite3.connect(DB_NAME)
+    cur = conn.cursor()
+    cur.execute(COUNT_TEXT)
+    count = cur.fetchone()[0]
+    get_id = random.randint(1, count)
+    cur.execute(f"SELECT * FROM {TABLE_NAME} where id = ?", (get_id,))
+    _, philosopher, quote = cur.fetchone()
+    conn.close()
+    return philosopher, quote
+
+
 def main():
     args = parse_args()
     if (args.philosopher and not args.quotes) or (args.quotes and not args.philosopher):
@@ -109,4 +123,5 @@ def debug_insert_many():
 if __name__ == "__main__":
     # create_table()
     # debug_insert_table()
-    main()
+    get_random_qoute()
+    # main()
